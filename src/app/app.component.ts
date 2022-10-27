@@ -1,10 +1,28 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+
+import { AuthService } from './core/auth.service';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.sass']
+  template: `<div class="container-fluid">
+    <app-header></app-header>
+    <div class="container-fluid mt-2">
+      <router-outlet></router-outlet>
+    </div>
+  </div>`,
 })
 export class AppComponent {
-  title = 'doorje-app';
+  
+  isAuthenticated$: Observable<boolean>;
+  isDoneLoading$: Observable<boolean>;
+  canActivateProtectedRoutes$: Observable<boolean>;
+
+  constructor(
+    private authService: AuthService,
+  ) {
+    this.isAuthenticated$ = this.authService.isAuthenticated$;
+    this.isDoneLoading$ = this.authService.isDoneLoading$;
+    this.canActivateProtectedRoutes$ = this.authService.canActivateProtectedRoutes$;
+  }
 }
